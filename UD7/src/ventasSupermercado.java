@@ -20,7 +20,7 @@ public class ventasSupermercado {
 
 		
 		double producto1iva= producto1*0.21;
-		double producto2iva = producto2*0.04;
+		double producto2iva= producto2*0.04;
 		double producto3iva= producto3*0.21;
 		double producto4iva= producto1*0.04;
 		double producto5iva= producto1*0.21;
@@ -58,20 +58,20 @@ public class ventasSupermercado {
 		double totalbruto4 = compra4*producto4;
 		double totalbruto5 = compra5*producto5;		
 		
-		double totaliva1 = compra1*producto1iva;
-		double totaliva2 = compra2*producto2iva;
-		double totaliva3 = compra3*producto3iva;
-		double totaliva4 = compra4*producto4iva;
-		double totaliva5 = compra5*producto5iva;
+		double totaliva1 = compra1*(producto1+producto1iva);
+		double totaliva2 = compra2*(producto2+producto2iva);
+		double totaliva3 = compra3*(producto3+producto3iva);
+		double totaliva4 = compra4*(producto4+producto4iva);
+		double totaliva5 = compra5*(producto5+producto5iva);
 		
-		double totalcompra = ((totalbruto1+totaliva1)+(totalbruto2+totaliva2)+(totalbruto3+totaliva3)+(totalbruto4+totaliva4)+(totalbruto5+totaliva5));
+		double totalcompra = totaliva1+ totaliva2 + totaliva3 + totaliva4 + totaliva5;
 		 
 		
-		System.out.println("El precio total bruto del producto 1 es: " +(String.format("%.2f", totalbruto1))+ " y con el IVA: "+(String.format("%.2f", (totalbruto1+totaliva1))));
-		System.out.println("El precio total bruto del producto 2 es: " +(String.format("%.2f", totalbruto2))+ " y con el IVA: "+(String.format("%.2f", (totalbruto1+totaliva2))));
-		System.out.println("El precio total bruto del producto 3 es: " +(String.format("%.2f", totalbruto3))+ " y con el IVA: "+(String.format("%.2f", (totalbruto1+totaliva3))));
-		System.out.println("El precio total bruto del producto 4 es: " +(String.format("%.2f", totalbruto4))+ " y con el IVA: "+(String.format("%.2f", (totalbruto1+totaliva4))));
-		System.out.println("El precio total bruto del producto 5 es: " +(String.format("%.2f", totalbruto5))+ " y con el IVA: "+(String.format("%.2f", (totalbruto1+totaliva5))));
+		System.out.println("El precio total bruto del producto 1 es: " +(String.format("%.2f", totalbruto1))+ " y con el IVA: "+(String.format("%.2f",totaliva1)));
+		System.out.println("El precio total bruto del producto 2 es: " +(String.format("%.2f", totalbruto2))+ " y con el IVA: "+(String.format("%.2f",totaliva2)));
+		System.out.println("El precio total bruto del producto 3 es: " +(String.format("%.2f", totalbruto3))+ " y con el IVA: "+(String.format("%.2f",totaliva3)));
+		System.out.println("El precio total bruto del producto 4 es: " +(String.format("%.2f", totalbruto4))+ " y con el IVA: "+(String.format("%.2f",totaliva4)));
+		System.out.println("El precio total bruto del producto 5 es: " +(String.format("%.2f", totalbruto5))+ " y con el IVA: "+(String.format("%.2f",totaliva5)));
 		
 		System.out.println("El total de la compra es de: "+(String.format("%.2f", totalcompra)));
 		
