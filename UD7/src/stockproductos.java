@@ -71,7 +71,6 @@ public class stockproductos {
 		String [] eleccion = {"añadir", "buscar", "listar"};
 		String opcion;
 
-
 		opcion=(String) JOptionPane.showInputDialog(null, "Elige tu opción ", "Tienda de chuches", JOptionPane.DEFAULT_OPTION, null, eleccion, "listar");
 		switch (opcion) {
 		case "listar":
@@ -118,7 +117,6 @@ public class stockproductos {
 				System.out.println(stockprecio.get(element).get("cantidad"));
 
 			}
-
 		}
 	}
 	public static void enorden (Hashtable<String, Hashtable<String, String>> stockprecio){
@@ -132,15 +130,3 @@ public class stockproductos {
 		}     
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
