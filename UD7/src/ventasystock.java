@@ -68,10 +68,12 @@ public class ventasystock {
 		stockprecio.put("moneda de chocolate", monedadechocolate);
 		stockprecio.put("chicle", chicle);
 		
-		String [] eleccion = {"añadir", "buscar", "listar", "comprar"};
+		String [] eleccion = {"añadir", "buscar", "listar", "comprar", "exit"};
 		String opcion;
-
+		
+		do {
 		opcion=(String) JOptionPane.showInputDialog(null, "Elige tu opción ", "Tienda de chuches", JOptionPane.DEFAULT_OPTION, null, eleccion, "listar");
+			
 		switch (opcion) {
 		case "listar":
 			enorden (stockprecio);
@@ -84,11 +86,13 @@ public class ventasystock {
 			buscar (stockprecio);
 			break;
 		case "comprar":
-			comprar();
+			comprar(stockprecio);
 		default:
 			break;
-
 		}
+		
+	}while(!opcion.equals("exit"));
+		
 	}
 
 	public static Hashtable <String, String> stock (String valor, String stock){
@@ -130,93 +134,160 @@ public class ventasystock {
 			System.out.println("Stock: "+stockprecio.get(element).get("cantidad"));
 		}     
 	}
-	public static void comprar () {
+	public static void comprar (Hashtable<String, Hashtable<String, String>> stockprecio) {
 		String [] arrayarticulos = {"agua", "caramelo", "regaliz", "chupa-chups", "piruleta", "coca-cola", "huevo kinder", "nestea", "moneda de chocolate", "chicle"};
 		String selection;
-		selection=(String) JOptionPane.showInputDialog(null, "Elige tu artículo de compra: ", "IVA incluido", JOptionPane.DEFAULT_OPTION, null, arrayarticulos, "agua");
+		double sumaSin = 0;
+		double sumaCon = 0;
+		int sumaCantidad = 0;
+		
+		String cpregunta0=JOptionPane.showInputDialog("¿Cuántos productos diferentes quieres?");
+		int quiero = Integer.parseInt(cpregunta0);
+		
+		for (int i = 0; i < quiero; i++) {
+		Enumeration <String> enumeration = stockprecio.keys();
+			selection=(String) JOptionPane.showInputDialog(null, "Elige tu artículo de compra: ", "IVA del 4%", JOptionPane.DEFAULT_OPTION, null, arrayarticulos, "agua");
+		while (enumeration.hasMoreElements()) {
+			String element = enumeration.nextElement();
+				if (selection.equals(element)) {
+					String cpregunta1=JOptionPane.showInputDialog("¿Cuántos quieres?");
+					double elpedido = Double.parseDouble(cpregunta1);
+					
+					double particulo = Double.parseDouble(stockprecio.get(element).get("precio"));
+					double stockcantidad = Double.parseDouble(stockprecio.get(element).get("cantidad"));
+					if(stockcantidad<elpedido) {
+						JOptionPane.showMessageDialog(null,"No hay suficiente stock");
+					}else {
+					double elresto = stockcantidad-elpedido;
+					String queda = Double.toString(elresto);
+					
+					stockprecio.get(element).put("cantidad", queda);
+					
+					double conIVA = elpedido*(particulo + (particulo*0.04));
+					double sinIVA = elpedido*particulo;
+					sumaSin += sinIVA;
+					sumaCon += conIVA;
+					sumaCantidad += elpedido;
+					
+					JOptionPane.showMessageDialog(null, "El total de artículos es de: "+(String.format("%.2f",+sinIVA)+" con el IVA: "+(String.format("%.2f",conIVA))));
+					JOptionPane.showMessageDialog(null, "Queda en el stock de la tienda: "+stockprecio.get(element).get("cantidad"));
+				}
+			}
+		}
+	}	
+		JOptionPane.showMessageDialog(null, "Cantidad de productos comprados: "+sumaCantidad);
+		JOptionPane.showMessageDialog(null, "El precio total de productos es de: "+(String.format("%.2f",+sumaSin)+" con el IVA: "+(String.format("%.2f",sumaCon))));
+		
+		String abono=JOptionPane.showInputDialog("Cantidad pagada: ");
+		double pago = Double.parseDouble(abono);
+		double cambio = (pago-(sumaCon));
+		
+		JOptionPane.showMessageDialog(null,"La cantidad abonada es de: "+(String.format("%.2f", pago))+"€");
+		JOptionPane.showMessageDialog(null,"Y el cambio: "+(String.format("%.2f", cambio))+"€");
 
-		switch (selection) {
+		
+		
+		/*switch (selection) {
 		case "agua":
 			String cpregunta1=JOptionPane.showInputDialog("¿Cuántos quieres?");
 			double menosagua = Double.parseDouble(cpregunta1);
 			double pagua = 0.95;
-			double realagua = 0.95 + (0.95*0.04);
+			double norealagua = menosagua*pagua;
+			double realagua = menosagua*(pagua + (pagua*0.04));
+			JOptionPane.showMessageDialog(null, "El total de artículos es de: "+(String.format("%.2f",+norealagua)+" con el IVA: "+(String.format("%.2f",realagua))));
 			
 			break;
 		case "caramelo":
 			String cpregunta2=JOptionPane.showInputDialog("¿Cuántos quieres?");
 			double menoscaramelo = Double.parseDouble(cpregunta2);
 			double pcaramelo = 0.10;
-			double realcaramelo = 0.95 + (0.95*0.04);
+			double norealcaramelo = menoscaramelo*pcaramelo;
+			double realcaramelo = menoscaramelo*(pcaramelo + (pcaramelo*0.04));
+			JOptionPane.showMessageDialog(null, "El total de artículos es de: "+(String.format("%.2f",norealcaramelo)+" con el IVA: "+(String.format("%.2f",realcaramelo))));
 
 			
 			break;
 		case "regaliz":
 			String cpregunta3=JOptionPane.showInputDialog("¿Cuántos quieres?");
 			double menosregaliz = Double.parseDouble(cpregunta3);
-			double pregaliz = 0.10;
-			double realregaliz = 0.95 + (0.95*0.04);
+			double pregaliz = 0.50;
+			double norealregaliz = menosregaliz * pregaliz;
+			double realregaliz = menosregaliz*(pregaliz + (pregaliz*0.04));
+			JOptionPane.showMessageDialog(null, "El total de artículos es de: "+(String.format("%.2f",norealregaliz)+" con el IVA: "+(String.format("%.2f",realregaliz))));
 
 
 			break;
 		case "chupa-chups":
 			String cpregunta4=JOptionPane.showInputDialog("¿Cuántos quieres?");
 			double menoschupachups = Double.parseDouble(cpregunta4);
-			double pchupachups = 0.10;
-			double realchupachups = 0.95 + (0.95*0.04);
+			double pchupachups = 1.00;
+			double norealchupachups = menoschupachups*pchupachups;
+			double realchupachups = menoschupachups*(pchupachups + (pchupachups*0.04));
+			JOptionPane.showMessageDialog(null, "El total de artículos es de: "+(String.format("%.2f",norealchupachups)+" con el IVA: "+(String.format("%.2f",realchupachups))));
 
 
 			break;
 		case "piruleta":
 			String cpregunta5=JOptionPane.showInputDialog("¿Cuántos quieres?");
 			double menospiruleta = Double.parseDouble(cpregunta5);
-			double ppiruleta = 0.10;
-			double realpiruleta = 0.95 + (0.95*0.04);
+			double ppiruleta = 0.75;
+			double norealpiruleta = menospiruleta*ppiruleta;
+			double realpiruleta = menospiruleta*(ppiruleta + (ppiruleta*0.04));
+			JOptionPane.showMessageDialog(null, "El total de artículos es de: "+(String.format("%.2f",norealpiruleta)+" con el IVA: "+(String.format("%.2f",realpiruleta))));
 
 
 			break;
 		case "coca-cola":
 			String cpregunta6=JOptionPane.showInputDialog("¿Cuántos quieres?");
 			double menoscocacola = Double.parseDouble(cpregunta6);
-			double pcocacola = 0.10;
-			double realcocacola = 0.95 + (0.95*0.04);
+			double pcocacola = 2.20;
+			double norealcocacola = menoscocacola*pcocacola;
+			double realcocacola = menoscocacola*(pcocacola + (pcocacola*0.04));
+			JOptionPane.showMessageDialog(null, "El total de artículos es de: "+(String.format("%.2f",norealcocacola)+" con el IVA: "+(String.format("%.2f",realcocacola))));
 
 
 			break;
 		case "huevo kinder":
 			String cpregunta7=JOptionPane.showInputDialog("¿Cuántos quieres?");
 			double menoskinder = Double.parseDouble(cpregunta7);
-			double pckinder = 0.10;
-			double realkinder = 0.95 + (0.95*0.04);
+			double pkinder = 1.50;
+			double norealkinder=menoskinder*pkinder;
+			double realkinder = menoskinder*(pkinder + (pkinder*0.04));
+			JOptionPane.showMessageDialog(null, "El total de artículos es de: "+(String.format("%.2f",norealkinder)+" con el IVA: "+(String.format("%.2f",realkinder))));
 
 
 			break;
 		case "nestea":
 			String cpregunta8=JOptionPane.showInputDialog("¿Cuántos quieres?");
 			double menosnestea = Double.parseDouble(cpregunta8);
-			double pnestea = 0.10;
-			double realnestea = 0.95 + (0.95*0.04);
+			double pnestea = 2.20;
+			double norealnestea=menosnestea*pnestea;
+			double realnestea = menosnestea*(pnestea + (pnestea*0.04));
+			JOptionPane.showMessageDialog(null, "El total de artículos es de: "+(String.format("%.2f",norealnestea)+" con el IVA: "+(String.format("%.2f",realnestea))));
 
 
 			break;
 		case "moneda de chocolate":
 			String cpregunta9=JOptionPane.showInputDialog("¿Cuántos quieres?");
-			double menomoneda = Double.parseDouble(cpregunta9);
-			double pmoneda = 0.10;
-			double realmoneda = 0.95 + (0.95*0.04);
+			double menosmoneda = Double.parseDouble(cpregunta9);
+			double pmoneda = 0.15;
+			double norealmoneda = pmoneda*menosmoneda;
+			double realmoneda = menosmoneda*(pmoneda + (pmoneda*0.04));
+			JOptionPane.showMessageDialog(null, "El total de artículos es de: "+(String.format("%.2f",norealmoneda)+" con el IVA: "+(String.format("%.2f",realmoneda))));
 
 
 			break;
 		case "chicle":
 			String cpregunta10=JOptionPane.showInputDialog("¿Cuántos quieres?");
 			double menoschicle = Double.parseDouble(cpregunta10);
-			double pchicle = 0.10;
-			double realchicle = 0.95 + (0.95*0.04);
-
+			double pchicle = 0.25;
+			double norealchicle = pchicle*menoschicle;
+			double realchicle = menoschicle*(pchicle + (pchicle*0.04));
+			JOptionPane.showMessageDialog(null, "El total de artículos es de: "+(String.format("%.2f",norealchicle)+" con el IVA: "+(String.format("%.2f",realchicle))));
 
 			break;
 		default:
 			break;
-		}
+		}*/
 	}
 }
